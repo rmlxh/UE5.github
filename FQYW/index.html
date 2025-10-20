@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UE5项目展示 | 非遗——福清佾舞</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#7C3AED', // 主色调：紫色
+            secondary: '#EC4899', // 辅助色：粉色
+            dark: '#0F172A', // 深色背景
+            light: '#F8FAFC', // 浅色文本
+            accent: '#3B82F6', // 强调色：蓝色
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-gradient {
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      .bg-grid {
+        background-image: radial-gradient(rgba(124, 58, 237, 0.1) 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+
+  <style>
+    /* 基础动画和过渡 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 滚动条美化 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1E293B;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #7C3AED;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6D28D9;
+    }
+
+    /* 加载动画 */
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 5px solid #7C3AED;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* 在现有样式中添加 */
+    #mobileMenu {
+      z-index: 99;
+      /* 确保菜单显示在其他内容上方 */
+    }
+    
+    /* 轮播图样式 */
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.75rem;
+    }
+    
+    .carousel-slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      backface-visibility: hidden;
+      width: 100%;
+    }
+    
+    .carousel-slide {
+      flex: 0 0 100%;
+    }
+    
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .carousel-controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 1rem;
+    }
+    
+    .carousel-control {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .carousel-control:hover {
+      background-color: rgba(124, 58, 237, 0.7);
+    }
+    
+    .carousel-indicators {
+      position: absolute;
+      bottom: 1rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .carousel-indicator {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .carousel-indicator.active {
+      background-color: #7C3AED;
+    }
+
+    /* 在现有样式中添加以下代码 */
+    .carousel-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 360px;
+      /* 固定轮播图高度，根据需要调整 */
+      overflow: hidden;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      /* 保持图片比例，完整显示在容器内 */
+      /* 可选：如果希望填满容器但允许裁剪，使用 object-fit: cover; */
+    }
+
+    /* 针对特别长的图片可以单独设置最大高度 */
+    .carousel-slide img.tall-image {
+      max-height: 100%;
+      width: auto;
+    }
+  </style>
+</head>
+
+<body class="font-inter bg-dark text-light overflow-x-hidden">
+  <!-- 顶部导航 -->
+  <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="navbar">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold text-gradient bg-gradient-to-r from-primary to-secondary">
+        非遗——福清佾舞
+      </a>
+
+      <nav class="hidden md:flex space-x-8">
+        <!-- 添加返回主页按钮 - 桌面端 -->
+        <a href="https://rmlxh.github.io/Resume.github.io/" target="_blank" rel="noopener noreferrer"
+          class="hover:text-primary transition-colors flex items-center">我的主页</a>
+        <a href="#overview" class="hover:text-primary transition-colors">项目概览</a>
+        <a href="#role" class="hover:text-primary transition-colors">我的角色</a>
+        <a href="#process" class="hover:text-primary transition-colors">创作过程</a>
+        <a href="#成果" class="hover:text-primary transition-colors">最终成果</a>
+        <a href="#tech" class="hover:text-primary transition-colors">技术细节</a>
+      </nav>
+
+      <button class="md:hidden text-2xl p-2" id="menuToggle" style="z-index: 100;">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- 移动端菜单 -->
+    <div
+      class="md:hidden bg-dark/95 backdrop-blur-md absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300"
+      id="mobileMenu">
+      <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+        <!-- 添加返回主页按钮 - 移动端 -->
+        <a href="https://rmlxh.github.io/Resume.github.io/" target="_blank" rel="noopener noreferrer"
+          class="hover:text-primary transition-colors flex items-center">我的主页</a>
+        <a href="#overview" class="py-2 hover:text-primary transition-colors">项目概览</a>
+        <a href="#role" class="py-2 hover:text-primary transition-colors">我的角色</a>
+        <a href="#process" class="py-2 hover:text-primary transition-colors">创作过程</a>
+        <a href="#成果" class="py-2 hover:text-primary transition-colors">最终成果</a>
+        <a href="#tech" class="py-2 hover:text-primary transition-colors">技术细节</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden bg-grid">
+    <div class="absolute inset-0 bg-gradient-to-b from-dark/80 to-dark"></div>
+
+    <!-- 装饰元素 -->
+    <div class="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/20 blur-3xl"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-secondary/20 blur-3xl"></div>
+
+    <div class="container mx-auto px-4 py-16 relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-bold leading-tight mb-6">
+          <span class="text-gradient bg-gradient-to-r from-primary to-secondary">非遗——福清佾舞</span>
+        </h1>
+        <p class="text-[clamp(1.1rem,3vw,1.5rem)] text-gray-300 mb-10 leading-relaxed">
+          《非遗 —— 福清佾舞》是一款以 UE5 为技术核心，融合佾舞历史、服饰、礼乐文化的沉浸式非遗数字化体验项目，支持用户探索、交互与文化学习。
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="#overview"
+            class="px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/20 transform hover:-translate-y-1">
+            了解更多
+          </a>
+          <a href="#成果"
+            class="px-8 py-3 bg-transparent border-2 border-primary text-primary hover:bg-primary/10 rounded-full font-medium transition-all transform hover:-translate-y-1">
+            查看演示
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 滚动指示器 -->
+    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <i class="fa fa-angle-down text-2xl text-gray-400"></i>
+    </div>
+  </section>
+
+  <!-- 项目概览 -->
+  <section id="overview" class="py-20 relative">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-12 text-center reveal">项目概览</h2>
+
+        <div class="grid md:grid-cols-2 gap-8 items-center reveal">
+          <div class="order-2 md:order-1">
+            <h3 class="text-2xl font-semibold mb-4 text-primary">项目简介</h3>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+              《非遗 —— 福清佾舞》是基于 Unreal Engine 5（UE5）开发的非遗文化沉浸式体验项目，以国家级非物质文化遗产 “福清佾舞” 为核心主题，融合教育性与娱乐性。
+            </p>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+              项目通过构建 “初始 2D 界面 - 福清佾舞展馆 - 春秋古镇” 三级场景，将佾舞承载的礼乐制度、儒学思想、传统伦理等文化内涵，转化为可交互、可探索的虚拟体验。
+            </p>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+              该项目旨在通过沉浸式体验，提升用户对非物质文化遗产的理解与兴趣，促进文化的传承与发展。
+            </p>
+          </div>
+          <div class="order-1 md:order-2 relative">
+            <div
+              class="rounded-xl overflow-hidden shadow-2xl shadow-primary/20 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+              <img src="images/1.1.png" alt="UE5项目场景展示" class="w-full h-auto">
+            </div>
+            <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-secondary/20 rounded-lg blur-xl"></div>
+          </div>
+        </div>
+
+        <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
+          <div
+            class="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-primary/50 transition-all duration-300 transform hover:-translate-y-1">
+            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+              <i class="fa fa-vr-cardboard text-primary text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">交互体验</h3>
+            <p class="text-gray-400">采用 “线性引导 + 自由探索” 结合的玩法设计，沉浸式探索</p>
+          </div>
+
+          <div
+            class="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-primary/50 transition-all duration-300 transform hover:-translate-y-1">
+            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+              <i class="fa fa-eye text-primary text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">目标受众</h3>
+            <p class="text-gray-400">青少年群体，文化爱好者与旅行者，非遗研究者与教育工作者</p>
+          </div>
+
+          <div
+            class="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800 hover:border-primary/50 transition-all duration-300 transform hover:-translate-y-1">
+            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+              <i class="fa fa-lightbulb-o text-primary text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">项目愿景</h3>
+            <p class="text-gray-400">技术赋能非遗传承，让传统文化“ 活 ”起来</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 我的角色 -->
+  <section id="role" class="py-20 bg-gradient-to-b from-dark to-dark/90 relative">
+    <div class="absolute inset-0 bg-grid opacity-50"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-12 text-center reveal">我的角色</h2>
+
+        <div class="bg-gray-900/60 backdrop-blur-md p-8 rounded-2xl border border-gray-800 mb-12 reveal">
+          <div class="flex items-center mb-6">
+            <div class="w-16 h-16 rounded-full overflow-hidden mr-6 border-2 border-primary">
+              <img src="images/mypicture.png" alt="开发者照片" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold">李秀如</h3>
+              <p class="text-primary">独立开发者</p>
+            </div>
+          </div>
+
+          <p class="text-gray-300 mb-6 leading-relaxed">
+            作为《非遗 —— 福清佾舞》UE5 沉浸式非遗数字化体验项目的独立开发者，我具备 Unreal Engine 5 全流程开发能力与非遗文化数字化转化思维，能够独立完成从项目策划、技术实现到设计优化的完整链路工作。
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 reveal">
+          <div class="bg-gray-900/40 backdrop-blur-sm p-6 rounded-xl border border-gray-800">
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+              <i class="fa fa-code text-primary mr-2"></i>
+              技术开发
+            </h3>
+            <ul class="space-y-3 text-gray-300">
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>蓝图模块化交互系统开发</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>跨场景动态资源加载与优化</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>佾舞动画与AI行为逻辑实现</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>全局交互事件与UI控制系统开发</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-900/40 backdrop-blur-sm p-6 rounded-xl border border-gray-800">
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+              <i class="fa fa-paint-brush text-primary mr-2"></i>
+              技术美术
+            </h3>
+            <ul class="space-y-3 text-gray-300">
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>非遗文化载体高精度建模与材质还原</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>场景氛围与文化符号视觉融合设计</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>Lumen光照与粒子特效的文化适配设计</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                <span>界面视觉与文化主题的统一性设计</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 创作过程 -->
+  <section id="process" class="py-20 relative">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-12 text-center reveal">创作过程</h2>
+
+        <!-- 阶段1: 设计思路 -->
+        <div class="mb-24 reveal">
+          <div class="text-center mb-12">
+            <span class="inline-block px-4 py-1 bg-primary/20 text-primary rounded-full text-sm font-medium mb-4">阶段一</span>
+            <h3 class="text-3xl font-bold mb-4">设计思路</h3>
+            <p class="text-gray-400 max-w-2xl mx-auto">基于项目需求与目标受众分析，制定整体设计框架与实现路径</p>
+          </div>
+
+          <!-- 子模块1: 场景搭建设计 -->
+          <div class="mb-16">
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">1</span>
+              场景搭建设计
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="sceneDesignCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.1.1.png" alt="场景设计草图" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.1.2.png" alt="场景布局规划" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.1.3.png" alt="场景氛围参考" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="sceneDesignCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="sceneDesignCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="sceneDesignCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  本项目共设计了一个初始界面和两个主要场景：福清佾舞展览馆和春秋古镇。通过这两个场景，用户不仅能深入了解佾舞的历史文化、服饰道具等，还能感受佾舞这项礼乐制度的礼教作用。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  福清佾舞展览馆内部布置了与佾舞相关的展品和道具，如籥、翟、云头履、进贤冠等，营造出一种身临其境的氛围。
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                  春秋古镇则是一个充满春秋战国气氛的虚拟古镇，用户可以在这里感受到浓厚的传统文化氛围，与NPC对话、完成任务、游览小镇以及参与“八佾舞于庭”的历史事件等。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块2: 互动元素设计 -->
+          <div class="mb-16">
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">2</span>
+              互动元素设计
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div class="order-2 md:order-1">
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  为了实现沉浸式体验，本项目设计了多种互动元素。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  重点设计了物体交互反馈系统，包括物理响应、粒子效果和声音反馈，确保用户操作具有即时且符合物理规律的响应。
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                  注重操作的简便性和用户的体验感受。通过优化按键布局和操作流程，使用户能够轻松上手并快速了解游戏玩法。
+                </p>
+              </div>
+              
+              <div class="order-1 md:order-2">
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="interactionDesignCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.2.1.png" alt="交互原型设计" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.2.2.png" alt="交互流程图" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.2.3.png" alt="交互反馈设计" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="interactionDesignCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="interactionDesignCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="interactionDesignCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块3: 故事情节设计 -->
+          <div>
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">3</span>
+              故事情节设计
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="storyDesignCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.3.1.png" alt="故事板设计" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.3.2.png" alt="角色设定" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.3.3.png" alt="剧情流程图" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="storyDesignCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="storyDesignCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="storyDesignCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  本项目设计了一个以第三人称视角展开的故事。玩家进入福清佾舞展览馆，通过了解佾舞的历史背景和服饰道具、观看佾舞的相关视频等情节，逐步深入了解佾舞的相关知识
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  主角通过传送门可进入春秋古镇，与NPC对话后即可接取任务。
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                  在完成任务的过程中，玩家需要寻找所有遗失的佾舞表演道具，并最终触发“八佾舞于庭”的历史事件作为故事的高潮。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 阶段2: 核心功能开发 -->
+        <div class="mb-24 reveal">
+          <div class="text-center mb-12">
+            <span class="inline-block px-4 py-1 bg-primary/20 text-primary rounded-full text-sm font-medium mb-4">阶段二</span>
+            <h3 class="text-3xl font-bold mb-4">核心功能开发</h3>
+            <p class="text-gray-400 max-w-2xl mx-auto">基于设计思路，实现项目的核心功能与技术框架</p>
+          </div>
+
+          <!-- 子模块1: 主菜单和退出菜单 -->
+          <div class="mb-16">
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">1</span>
+              主菜单和退出菜单
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div class="order-2 md:order-1">
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过用户控件蓝图，制作了初始界面的主菜单以及游戏说明的UI，便于用户了解本项目。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过用户控件蓝图，制作了退出菜单的UI界面,将其添加到相应的关卡蓝图后，用户可通过E键呼出。
+                </p>
+              </div>
+              
+              <div class="order-1 md:order-2">
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="architectureCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.4.1.png" alt="2.4.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.4.2.png" alt="2.4.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.4.3.png" alt="2.4.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.4.4.png" alt="2.4.4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.4.5.png" alt="2.4.5" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="architectureCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="architectureCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="architectureCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                    <button class="carousel-indicator" data-slide-to="3"></button>
+                    <button class="carousel-indicator" data-slide-to="4"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块2: 小地图和多媒体集成 -->
+          <div class="mb-16">
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">2</span>
+              小地图和多媒体集成
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="renderingCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.5.1.png" alt="2.5.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.5.2.png" alt="2.5.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.5.3.png" alt="2.5.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.5.4.png" alt="2.5.4" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="renderingCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="renderingCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="renderingCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                    <button class="carousel-indicator" data-slide-to="3"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过摄像机、用户控件蓝图和纹理材质等，制作了小地图的UI界面。通过第三人称蓝图将其添加到视口。
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                  视频播放控制功能允许用户通过按键控制视频的暂停和播放，以便更深入地了解佾舞的历史背景等知识。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过媒体播放器、文件媒体流、材质等，将视频置于平面播放，同时通过媒体音效组件播放声音。靠近时会有提示文字显现，按F键可进行交互，播放视频。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块3: 传送门和物品拾取 -->
+          <div>
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">3</span>
+              传送门和物品拾取
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div class="order-2 md:order-1">
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过蓝图制作了传送门，并通过用户控件蓝图设置了相应的黑屏动画，且添加了穿越过传送门的音效。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  制作了拾取物品的蓝图，当用户触碰到拾取物时即可销毁相应物品并修改对应任务栏状态。
+                </p>
+              </div>
+              
+              <div class="order-1 md:order-2">
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="interactionSystemCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.6.1.png" alt="2.6.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.6.2.png" alt="2.6.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.6.3.png" alt="2.6.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.6.4.png" alt="2.6.4" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="interactionSystemCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="interactionSystemCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="interactionSystemCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                    <button class="carousel-indicator" data-slide-to="3"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块4: 过场动画和AI漫游 -->
+          <div class="mb-16">
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">4</span>
+              过场动画和AI漫游
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="renderingCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.7.1.png" alt="2.7.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.7.2.png" alt="2.7.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.7.3.png" alt="2.7.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.7.4.png" alt="2.7.4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.7.5.png" alt="2.7.5" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.7.6.png" alt="2.7.6" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="renderingCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="renderingCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="renderingCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                    <button class="carousel-indicator" data-slide-to="3"></button>
+                    <button class="carousel-indicator" data-slide-to="4"></button>
+                    <button class="carousel-indicator" data-slide-to="5"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  在关卡中添加了触发体积，当玩家完成任务后前往提示地点，即可触发相应过场动画。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  制作了AI漫游功能，置于春秋古镇，添加氛围。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块5: 3D建模与动画制作 -->
+          <div>
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">5</span>
+              3D建模与动画制作
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div class="order-2 md:order-1">
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过3ds MAX和PS等软件，以及Tripo3d.ai等AI工具，对展览馆、物品、人物等进行了制作与修改，对部分佾舞道具进行3D建模,对佾舞的舞蹈动作进行了动画制作。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过蓝图制作了佾舞舞蹈的人物，供用户欣赏。
+                </p>
+              </div>
+              
+              <div class="order-1 md:order-2">
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="interactionSystemCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.11.1.png" alt="2.11.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.11.2.png" alt="2.11.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.11.3.png" alt="2.11.3" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="interactionSystemCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="interactionSystemCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="interactionSystemCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 阶段3: 技术难点与解决方案 -->
+        <div class="reveal">
+          <div class="text-center mb-12">
+            <span class="inline-block px-4 py-1 bg-primary/20 text-primary rounded-full text-sm font-medium mb-4">阶段三</span>
+            <h3 class="text-3xl font-bold mb-4">技术难点与解决方案</h3>
+            <p class="text-gray-400 max-w-2xl mx-auto">开发过程中遇到的挑战及应对策略</p>
+          </div>
+
+          <!-- 子模块1: 对话系统与答题 -->
+          <div class="mb-16">
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">1</span>
+              对话系统与答题
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="assetProductionCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.8.1.png" alt="2.8.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.8.2.png" alt="2.8.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.8.3.png" alt="2.8.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.8.4.png" alt="2.8.4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.8.5.png" alt="2.8.5" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.8.6.png" alt="2.8.6" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.8.7.png" alt="2.8.7" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.8.8.png" alt="2.8.8" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="assetProductionCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="assetProductionCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="assetProductionCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                    <button class="carousel-indicator" data-slide-to="3"></button>
+                    <button class="carousel-indicator" data-slide-to="4"></button>
+                    <button class="carousel-indicator" data-slide-to="5"></button>
+                    <button class="carousel-indicator" data-slide-to="6"></button>
+                    <button class="carousel-indicator" data-slide-to="7"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p class="text-gray-300 leading-relaxed">
+                  和NPC对话后可接取任务则为用户提供了更多的互动机会。用户可以与NPC进行对话，了解他们的故事和背景。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过用户控件蓝图，制作了对话界面的UI。通过玩家控制器制作了对话系统，通过结构体设置了对话的内容，因此可在对话NPC蓝图内进行相应的操作。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  制作完对话NPC后，通过全局变量设置了回答NPC问题的对错，在关卡蓝图中进行开门。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块2: 查看物品 -->
+          <div class="mb-16">
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">2</span>
+              查看物品
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div class="order-2 md:order-1">
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  物品查看功能允许用户通过按键查看佾舞表演的所需的服饰道具，以便更深入地了解佾舞的相关知识。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过用户控件蓝图，制作了查看物品功能的UI界面,在第三人称蓝图中进行了相应的设置。用户可通过F键进行交互。
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                  在相应的UI界面中，可查看物品介绍，以及对物品进行旋转缩放等操作。
+                </p>
+              </div>
+              
+              <div class="order-1 md:order-2">
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="performanceOptimizationCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.9.1.png" alt="2.9.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.9.2.png" alt="2.9.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.9.3.png" alt="2.9.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.9.4.png" alt="2.9.4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.9.5.png" alt="2.9.5" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.9.6.png" alt="2.9.6" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="performanceOptimizationCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="performanceOptimizationCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="performanceOptimizationCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                    <button class="carousel-indicator" data-slide-to="3"></button>
+                    <button class="carousel-indicator" data-slide-to="4"></button>
+                    <button class="carousel-indicator" data-slide-to="5"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 子模块3: 任务接取与状态修改 -->
+          <div>
+            <h4 class="text-2xl font-semibold mb-6 text-primary flex items-center">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">3</span>
+              任务接取与状态修改
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <!-- 轮播图 -->
+                <div class="carousel relative" id="qualityAssuranceCarousel">
+                  <div class="carousel-slides">
+                    <div class="carousel-slide">
+                      <img src="images/2.10.1.png" alt="2.10.1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.10.2.png" alt="2.10.2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.10.3.png" alt="2.10.3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.10.4.png" alt="2.10.4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-slide">
+                      <img src="images/2.10.5.png" alt="2.10.5" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                  
+                  <div class="carousel-controls">
+                    <button class="carousel-control prev" data-target="qualityAssuranceCarousel">
+                      <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="carousel-control next" data-target="qualityAssuranceCarousel">
+                      <i class="fa fa-angle-right"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="carousel-indicators" data-target="qualityAssuranceCarousel">
+                    <button class="carousel-indicator active" data-slide-to="0"></button>
+                    <button class="carousel-indicator" data-slide-to="1"></button>
+                    <button class="carousel-indicator" data-slide-to="2"></button>
+                    <button class="carousel-indicator" data-slide-to="3"></button>
+                    <button class="carousel-indicator" data-slide-to="4"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  接取任务并寻找遗失的佾舞表演道具翟籥来完成任务。这些任务不仅增加了游戏的趣味性，还让用户更加深入地了解佾舞的各个方面。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  通过用户控件蓝图，制作了任务导航栏的UI界面。通过全局变量，判断用户是否接取任务。成功接取任务后通过第三人称蓝图将其添加到视口。
+                </p>
+                <p class="text-gray-300 leading-relaxed">
+                  拾取物品后，可对拾取物品的数量进行变更。当这项任务完成后会修改任务状态，并给出下一项任务。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终成果 -->
+  <section id="成果" class="py-20 bg-gradient-to-b from-dark/90 to-dark relative">
+    <div class="absolute inset-0 bg-grid opacity-50"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-12 text-center reveal">最终成果</h2>
+
+        <!-- 视频演示 -->
+        <div class="mb-16 reveal">
+          <div class="aspect-video rounded-xl overflow-hidden shadow-2xl shadow-primary/20">
+            <video controls class="w-full h-full object-cover" poster="videos/FQYW-FM.jpg"
+              preload="metadata">
+              <source src="videos/FQYW.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <!-- 游戏截图 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 reveal">
+          <div
+            class="rounded-xl overflow-hidden shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+            <img src="images/1.png" alt="UE5项目截图1" class="w-full h-auto">
+          </div>
+          <div
+            class="rounded-xl overflow-hidden shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+            <img src="images/2.png" alt="UE5项目截图2" class="w-full h-auto">
+          </div>
+          <div
+            class="rounded-xl overflow-hidden shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+            <img src="images/3.png" alt="UE5项目截图3" class="w-full h-auto">
+          </div>
+          <div
+            class="rounded-xl overflow-hidden shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+            <img src="images/4.png" alt="UE5项目截图4" class="w-full h-auto">
+          </div>
+        </div>
+
+        <!-- 特性亮点 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
+          <div class="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800">
+            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+              <i class="fa fa-cubes text-primary text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">非遗文化的“活态化”转译</h3>
+            <p class="text-gray-400">实现了佾舞文化从“静态记载”到“动态体验”的深度转译。</p>
+          </div>
+
+          <div class="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800">
+            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+              <i class="fa fa-sun-o text-primary text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">UE5技术的“场景化”适配</h3>
+            <p class="text-gray-400">利用Nanite微多边形技术加载数十亿多边形的佾舞服饰绣线、翟羽纹理模型</p>
+          </div>
+
+          <div class="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-800">
+            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+              <i class="fa fa-bolt text-primary text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">体验设计的“双轨化”融合</h3>
+            <p class="text-gray-400">构建“教育性-游戏性”双轨融合的体验设计</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技术细节 -->
+  <section id="tech" class="py-20 relative">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-12 text-center reveal">技术细节</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 reveal">
+          <div>
+            <h3 class="text-2xl font-semibold mb-6 text-primary">开发工具</h3>
+
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-cube text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Unreal Engine 5.4.4</h4>
+                  <p class="text-gray-400 text-sm">游戏引擎</p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-code text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">C++ & Blueprints</h4>
+                  <p class="text-gray-400 text-sm">编程语言与可视化脚本</p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-paint-brush text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">3ds MAX 2022</h4>
+                  <p class="text-gray-400 text-sm">3D美术资源制作</p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-fire text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Adobe Photoshop 2022</h4>
+                  <p class="text-gray-400 text-sm">2D贴图与纹理</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-2xl font-semibold mb-6 text-primary">核心技术</h3>
+
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-cubes text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Nanite虚拟几何体</h4>
+                  <p class="text-gray-400 text-sm">无限制多边形渲染，自动优化几何细节</p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-lightbulb-o text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Lumen全局光照</h4>
+                  <p class="text-gray-400 text-sm">动态全局光照与反射系统，实时计算光线传播</p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-random text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Chaos物理系统</h4>
+                  <p class="text-gray-400 text-sm">高精度刚体与柔体物理模拟，真实的物体交互</p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fa fa-sliders text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium"> Niagara粒子系统</h4>
+                  <p class="text-gray-400 text-sm">高性能粒子效果，用于环境特效与交互反馈</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系部分 -->
+  <section class="py-20 bg-gradient-to-b from-dark to-dark/90 relative">
+    <div class="absolute inset-0 bg-grid opacity-50"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-3xl mx-auto text-center reveal">
+        <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-6">对项目感兴趣？</h2>
+        <p class="text-gray-300 mb-10 text-lg">
+          无论您是想了解更多技术细节，还是探讨合作机会，都欢迎与我联系！
+        </p>
+
+        <!-- 按钮组 -->
+        <div class="flex flex-wrap justify-center gap-4">
+          <!-- 发送邮件按钮 -->
+          <a href="mailto:343724601@qq.com?subject=关于UE5《非遗——福清佾舞》项目&body=你好，我对这个项目很感兴趣..."
+            class="px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/20 flex items-center">
+            <i class="fa fa-envelope mr-2"></i> 发送邮件
+          </a>
+
+          <!-- GitHub按钮 -->
+          <a href="https://github.com/rmlxh/UE5.github" target="_blank" rel="noopener noreferrer"
+            class="px-8 py-3 bg-transparent border-2 border-primary text-primary hover:bg-primary/10 rounded-full font-medium transition-all flex items-center">
+            <i class="fa fa-github mr-2"></i> GitHub
+          </a>
+        </div>
+
+        <!-- 提示文本 -->
+        <span class="ml-4 text-gray-400">或直接发送邮件至: 343724601@qq.com</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="py-10 bg-dark border-t border-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <a href="#" class="text-2xl font-bold text-gradient bg-gradient-to-r from-primary to-secondary">
+            非遗——福清佾舞
+          </a>
+
+          <p class="text-gray-400 mt-2">© 2025 李秀如. 保留所有权利.</p>
+        </div>
+
+        <div class="flex space-x-6">
+          <!-- GitHub -->
+          <a href="https://github.com/rmlxh" target="_blank" rel="noopener noreferrer"
+            class="text-gray-400 hover:text-primary transition-colors">
+            <i class="fa fa-github text-xl"></i>
+          </a>
+
+          <!-- 微信 -->
+          <div class="relative group">
+            <a href="#" class="text-gray-400 hover:text-primary transition-colors cursor-pointer">
+              <i class="fa fa-weixin text-xl"></i>
+            </a>
+            <div
+              class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10">
+              <div class="bg-white p-2 rounded-lg shadow-lg">
+                <img src="images/wx.png" alt="微信二维码" class="w-499 h-499 object-cover">
+                <div class="text-center mt-1 text-sm text-gray-800 whitespace-nowrap">微信扫一扫</div>
+              </div>
+              <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('bg-dark/95', 'backdrop-blur-md', 'shadow-lg');
+      } else {
+        navbar.classList.remove('bg-dark/95', 'backdrop-blur-md', 'shadow-lg');
+      }
+    });
+    
+    // 移动端菜单
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    menuToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (menuOpen) {
+        mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+        mobileMenu.classList.add('-translate-y-full', 'opacity-0');
+        menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+      } else {
+        mobileMenu.classList.remove('-translate-y-full', 'opacity-0');
+        mobileMenu.classList.add('opacity-100', 'translate-y-0');
+        menuToggle.innerHTML = '<i class="fa fa-times"></i>';
+      }
+      menuOpen = !menuOpen;
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+
+          // 关闭移动菜单
+          if (menuOpen) {
+            mobileMenu.classList.remove('opacity-100', 'translate-y-0');
+            mobileMenu.classList.add('-translate-y-full', 'opacity-0');
+            menuToggle.innerHTML = '<i class="fa fa-bars"></i>';
+            menuOpen = false;
+          }
+        }
+      });
+    });
+
+    // 滚动动画
+    const revealElements = document.querySelectorAll('.reveal');
+
+    function checkReveal() {
+      const windowHeight = window.innerHeight;
+      const revealPoint = 150;
+
+      revealElements.forEach(element => {
+        const revealTop = element.getBoundingClientRect().top;
+
+        if (revealTop < windowHeight - revealPoint) {
+          element.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', checkReveal);
+    window.addEventListener('load', checkReveal);
+
+    // 初始检查
+    checkReveal();
+    
+    // 轮播图功能
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初始化所有轮播图
+      const carousels = document.querySelectorAll('.carousel');
+      carousels.forEach(carousel => {
+        initCarousel(carousel);
+      });
+    });
+    
+    function initCarousel(carousel) {
+      const carouselId = carousel.id;
+      const slidesContainer = carousel.querySelector('.carousel-slides');
+      const slides = carousel.querySelectorAll('.carousel-slide');
+      const prevButton = carousel.querySelector('.carousel-control.prev');
+      const nextButton = carousel.querySelector('.carousel-control.next');
+      const indicators = carousel.querySelectorAll('.carousel-indicator');
+      
+      let currentSlide = 0;
+      const slideCount = slides.length;
+      
+      // 每个轮播项宽度设为100%
+      slides.forEach(slide => {
+        slide.style.width = '100%';
+      });
+      
+      // 更新轮播图显示
+      function updateCarousel() {
+        // 计算滑动距离：当前索引 * 容器宽度
+        const slideDistance = -currentSlide * slidesContainer.offsetWidth;
+        slidesContainer.style.transform = `translateX(${slideDistance}px)`;
+        
+        // 更新指示器
+        indicators.forEach((indicator, index) => {
+          if (index === currentSlide) {
+            indicator.classList.add('active');
+          } else {
+            indicator.classList.remove('active');
+          }
+        });
+      }
+      
+      // 前一张按钮点击事件
+      prevButton.addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+        updateCarousel();
+      });
+      
+      // 后一张按钮点击事件
+      nextButton.addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % slideCount;
+        updateCarousel();
+      });
+      
+      // 指示器点击事件
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+          currentSlide = index;
+          updateCarousel();
+        });
+      });
+      
+      // 自动轮播
+      let autoplayInterval = setInterval(() => {
+        currentSlide = (currentSlide + 1) % slideCount;
+        updateCarousel();
+      }, 5000);
+      
+      // 鼠标悬停时暂停自动轮播
+      carousel.addEventListener('mouseenter', () => {
+        clearInterval(autoplayInterval);
+      });
+      
+      // 鼠标离开时恢复自动轮播
+      carousel.addEventListener('mouseleave', () => {
+        autoplayInterval = setInterval(() => {
+          currentSlide = (currentSlide + 1) % slideCount;
+          updateCarousel();
+        }, 5000);
+      });
+      
+      // 初始化显示第一张
+      updateCarousel();
+    }
+  </script>
+</body>
+
+</html>
