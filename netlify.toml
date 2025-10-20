@@ -1,0 +1,17 @@
+[build]
+  # 发布目录设置为当前目录
+  publish = "."
+
+# 优化用户体验：确保访问路径始终以斜杠结尾
+[[redirects]]
+  from = "/FQYW"
+  to = "/FQYW/"
+  status = 301
+
+# 核心配置：将所有请求路由到对应的index.html
+[[redirects]]
+  from = "/FQYW/*"
+  to = "/FQYW/index.html"
+  status = 200
+
+
